@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    
+<div class="bg-warning p-5 d-flex justify-content-center align-items-center w-50 m-auto" style="gap: 50px;">
+    <p class="bg-black text-white p-2 fw-bold">
+        <a href="{% url 'homepage'%}">HOME</a>
+    </p>
+    <p class="bg-black text-white p-2 fw-bold">
+        <a href="{%url 'musician'%}">ADD MUSICIANS</a>
+    </p>
+    <p class="bg-black text-white p-2 fw-bold">
+        <a href="{%url 'album'%}">ADD ALBUM</a>
+    </p>
+</div>
+
+{% block content %}
+    <h1 class="text-center">THIS IS THE HOME PAGE</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Musician Name</th>
+                <th>Email</th>
+                <th>Album Name</th>
+                <th>Release Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for musician in musician_data %}
+                <tr>
+                    <td>{{ musician.id }}</td>
+                    <td>{{ musician.first_name }} {{ musician.last_name }}</td>
+                    <td>{{ musician.email }}</td>
+                    {% if musician.albums.exists %}
+                        {% for album in musician.albums.all %}
+                            <td>{{ album.album_name }}</td>
+                            <td>{{ album.release_date }}</td>
+                            <td>
+                                <a href="{% url 'edit' musician.id %}" class="btn btn-primary btn-sm">Edit</a>
+                                <a href="{% url 'delete' musician.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        {% endfor %}
+                    {% else %}
+                        <td colspan="2">No albums found</td>
+                        <td>
+                            <a href="{% url 'edit' musician.id %}" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="{% url 'delete' musician.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
